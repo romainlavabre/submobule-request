@@ -7,7 +7,7 @@
     <groupId>org.romainlavabre</groupId>
     <artifactId>request</artifactId>
 
-    <version>3.0.0</version>
+    <version>3.1.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -45,8 +45,6 @@
         </dependency>
 
 
-
-
         <!-- TEST -->
         <dependency>
             <groupId>junit</groupId>
@@ -62,6 +60,7 @@
             <email>romainlavabre98@gmail.com</email>
         </developer>
     </developers>
+
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
