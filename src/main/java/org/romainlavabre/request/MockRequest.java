@@ -16,9 +16,11 @@ public class MockRequest implements Request {
 
     protected final Map< String, Object >       parameters;
     protected final Map< String, UploadedFile > files;
+    protected final Map< String, String >       headers;
 
 
     public MockRequest() {
+        this.headers    = new HashMap<>();
         this.parameters = new HashMap<>();
         this.files      = new HashMap<>();
     }
@@ -186,7 +188,12 @@ public class MockRequest implements Request {
 
     @Override
     public String getHeader( final String name ) {
-        return null;
+        return headers.get( name );
+    }
+
+
+    public void setHeader( String name, String value ) {
+        this.headers.put( name, value );
     }
 
 
@@ -238,12 +245,26 @@ public class MockRequest implements Request {
     }
 
 
-    public static Request build( final Map< String, Object > parameters, final Map< String, UploadedFile > files ) {
+    public static Request build( final Map< String, Object > parameters, final Map< String, UploadedFile > files, Map< String, String > headers ) {
 
-        final Request request = new MockRequest();
+        final MockRequest request = new MockRequest();
 
         parameters.forEach( request::setParameter );
         files.forEach( request::setUploadedFile );
+        headers.forEach( request::setHeader );
+
+
+        return request;
+    }
+
+
+    public static Request build( final Map< String, Object > parameters, final Map< String, UploadedFile > files ) {
+
+        final MockRequest request = new MockRequest();
+
+        parameters.forEach( request::setParameter );
+        files.forEach( request::setUploadedFile );
+
 
         return request;
     }
