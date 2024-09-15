@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.romainlavabre.request.exception.Http400Exception;
 import org.romainlavabre.request.exception.Http422Exception;
+import org.romainlavabre.request.exception.Http500Exception;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.context.annotation.RequestScope;
@@ -280,6 +281,7 @@ public class RequestImpl implements Request {
             BufferedReader reader = null;
 
             try {
+
                 reader = this.request.getReader();
 
                 while ( ( line = reader.readLine() ) != null ) {
@@ -287,6 +289,9 @@ public class RequestImpl implements Request {
                 }
             } catch ( final IOException e ) {
                 e.printStackTrace();
+            } catch ( IllegalStateException e ) {
+                e.printStackTrace();
+                throw new Http500Exception( "INTERNAL_SERVER_ERROR" );
             }
 
             final String jsonStr = json.toString();
