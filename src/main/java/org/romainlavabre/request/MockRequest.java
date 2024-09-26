@@ -3,10 +3,9 @@ package org.romainlavabre.request;
 import org.romainlavabre.request.exception.Http400Exception;
 import org.romainlavabre.request.exception.Http422Exception;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * @author Romain Lavabre <romainlavabre98@gmail.com>
@@ -17,12 +16,14 @@ public class MockRequest implements Request {
     protected final Map< String, Object >       parameters;
     protected final Map< String, UploadedFile > files;
     protected final Map< String, String >       headers;
+    protected final Map< String, String >       queryStrings;
 
 
     public MockRequest() {
-        this.headers    = new HashMap<>();
-        this.parameters = new HashMap<>();
-        this.files      = new HashMap<>();
+        this.headers      = new HashMap<>();
+        this.parameters   = new HashMap<>();
+        this.files        = new HashMap<>();
+        this.queryStrings = new HashMap<>();
     }
 
 
@@ -134,19 +135,25 @@ public class MockRequest implements Request {
 
     @Override
     public String getRawQueryString() {
-        return null;
+        StringJoiner stringJoiner = new StringJoiner( "&" );
+
+        for ( Map.Entry< String, String > entry : this.queryStrings.entrySet() ) {
+            stringJoiner.add( URLEncoder.encode( entry.getKey() + "=" + entry.getValue(), StandardCharsets.UTF_8 ) );
+        }
+
+        return stringJoiner.toString();
     }
 
 
     @Override
     public String getQueryString( final String name ) {
-        return null;
+        return queryStrings.get( name );
     }
 
 
     @Override
     public void setQueryString( final String name, final String value ) {
-
+        queryStrings.put( name, value );
     }
 
 
@@ -242,6 +249,19 @@ public class MockRequest implements Request {
     @Override
     public String getBody() {
         return "";
+    }
+
+
+    public static Request build( final Map< String, Object > parameters, final Map< String, UploadedFile > files, Map< String, String > headers, Map< String, String > queryStrings ) {
+
+        final MockRequest request = new MockRequest();
+
+        parameters.forEach( request::setParameter );
+        files.forEach( request::setUploadedFile );
+        headers.forEach( request::setHeader );
+        queryStrings.forEach( request::setQueryString );
+
+        return request;
     }
 
 
