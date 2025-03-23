@@ -2,6 +2,7 @@ package org.romainlavabre.request;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.romainlavabre.request.exception.Http400Exception;
 import org.romainlavabre.request.exception.Http422Exception;
@@ -255,6 +256,12 @@ public class RequestImpl implements Request {
     @Override
     public String getBody() {
         return this.body;
+    }
+
+
+    @Override
+    public Cookie[] getCookies() {
+        return request.getCookies();
     }
 
 

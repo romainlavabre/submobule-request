@@ -1,5 +1,6 @@
 package org.romainlavabre.request;
 
+import jakarta.servlet.http.Cookie;
 import org.romainlavabre.request.exception.Http400Exception;
 import org.romainlavabre.request.exception.Http422Exception;
 
@@ -249,6 +250,12 @@ public class MockRequest implements Request {
     @Override
     public String getBody() {
         return "";
+    }
+
+
+    @Override
+    public Cookie[] getCookies() {
+        return new Cookie[ 0 ];
     }
 
 

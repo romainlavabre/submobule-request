@@ -1,5 +1,7 @@
 package org.romainlavabre.request;
 
+import jakarta.servlet.http.Cookie;
+
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +110,7 @@ public interface Request {
      */
     void setUploadedFile( String name, UploadedFile uploadedFile );
 
+
     /**
      * Add or overwrite uploaded file
      *
@@ -115,6 +118,7 @@ public interface Request {
      * @param uploadedFile Uploaded file
      */
     void addUploadedFile( String name, UploadedFile uploadedFile );
+
 
     /**
      * @return Client IP
@@ -166,4 +170,10 @@ public interface Request {
      * @return Raw body
      */
     String getBody();
+
+
+    /**
+     * @return Cookies
+     */
+    Cookie[] getCookies();
 }
