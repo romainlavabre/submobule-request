@@ -134,7 +134,7 @@ public class RequestImpl implements Request {
 
         for ( final Map.Entry< String, Object > entry : this.parameters.entrySet() ) {
             if ( entry.getKey().startsWith( prefix ) ) {
-                parameters.put( entry.getKey().replace( prefix, "" ), entry.getValue() );
+                parameters.put( entry.getKey().replaceFirst( prefix, "" ), entry.getValue() );
             }
         }
 
