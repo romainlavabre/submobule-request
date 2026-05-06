@@ -1,7 +1,5 @@
 package org.romainlavabre.request;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.romainlavabre.request.exception.Http400Exception;
@@ -12,6 +10,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class RequestImpl implements Request {
     private       String                body;
 
 
-    public RequestImpl() throws JsonProcessingException {
+    public RequestImpl() {
         this.parameters   = new HashMap<>();
         this.queryStrings = new HashMap<>();
         this.request      = ( ( ServletRequestAttributes ) RequestContextHolder.getRequestAttributes() ).getRequest();
@@ -265,7 +264,7 @@ public class RequestImpl implements Request {
     }
 
 
-    private void parseJson() throws JsonProcessingException {
+    private void parseJson() {
 
         try {
             body = StreamUtils.copyToString( request.getInputStream(), StandardCharsets.UTF_8 );
