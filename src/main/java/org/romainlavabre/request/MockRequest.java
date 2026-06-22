@@ -254,6 +254,12 @@ public class MockRequest implements Request {
 
 
     @Override
+    public byte[] getBodyAsBytes() {
+        return new byte[ 0 ];
+    }
+
+
+    @Override
     public Cookie[] getCookies() {
         return new Cookie[ 0 ];
     }

@@ -25,6 +25,7 @@ public class RequestImpl implements Request {
     private final Map< String, Object > parameters;
     private final Map< String, String > queryStrings;
     private       String                body;
+    private       byte[]                bodyBytes;
 
 
     public RequestImpl() {
@@ -259,6 +260,12 @@ public class RequestImpl implements Request {
 
 
     @Override
+    public byte[] getBodyAsBytes() {
+        return this.bodyBytes;
+    }
+
+
+    @Override
     public Cookie[] getCookies() {
         return request.getCookies();
     }
@@ -267,7 +274,8 @@ public class RequestImpl implements Request {
     private void parseJson() {
 
         try {
-            body = StreamUtils.copyToString( request.getInputStream(), StandardCharsets.UTF_8 );
+            this.bodyBytes = request.getInputStream().readAllBytes();
+            this.body      = new String( this.bodyBytes, StandardCharsets.UTF_8 );
         } catch ( IOException e ) {
             e.printStackTrace();
         }

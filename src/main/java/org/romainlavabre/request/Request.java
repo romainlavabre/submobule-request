@@ -173,6 +173,12 @@ public interface Request {
 
 
     /**
+     * @return Raw body as bytes (binary safe, e.g. for file uploads sent directly in the request body)
+     */
+    byte[] getBodyAsBytes();
+
+
+    /**
      * @return Cookies
      */
     Cookie[] getCookies();
