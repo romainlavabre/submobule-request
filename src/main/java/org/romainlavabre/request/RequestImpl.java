@@ -6,7 +6,6 @@ import org.romainlavabre.request.exception.Http400Exception;
 import org.romainlavabre.request.exception.Http422Exception;
 import org.romainlavabre.request.exception.Http500Exception;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -255,6 +254,10 @@ public class RequestImpl implements Request {
 
     @Override
     public String getBody() {
+        if ( this.body == null && this.bodyBytes != null ) {
+            this.body = new String( this.bodyBytes, StandardCharsets.UTF_8 );
+        }
+
         return this.body;
     }
 
@@ -275,7 +278,6 @@ public class RequestImpl implements Request {
 
         try {
             this.bodyBytes = request.getInputStream().readAllBytes();
-            this.body      = new String( this.bodyBytes, StandardCharsets.UTF_8 );
         } catch ( IOException e ) {
             e.printStackTrace();
         }
@@ -286,7 +288,7 @@ public class RequestImpl implements Request {
         }
 
 
-        if ( body == null ) {
+        if ( getBody() == null ) {
 
             final StringBuffer json = new StringBuffer();
 
@@ -308,13 +310,11 @@ public class RequestImpl implements Request {
                 throw new Http500Exception( "INTERNAL_SERVER_ERROR" );
             }
 
-            final String jsonStr = json.toString();
+            this.body = json.toString();
+        }
 
-            this.body = jsonStr;
-
-            if ( jsonStr.isBlank() ) {
-                return;
-            }
+        if ( this.body == null || this.body.isBlank() ) {
+            return;
         }
 
         final ObjectMapper objectMapper = new ObjectMapper();
